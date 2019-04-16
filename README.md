@@ -25,13 +25,13 @@ Once the system is installed (see above), you are ready to try some examples.
 To run these examples, make sure you are in the root directory.
 
 In this simple example, there is a single sensor oscillating between on and off:
-`./solve.sh misc misc1`
+  * `./solve.sh misc misc1`
 
 In this example, there are two sensors. One oscillates between on and off, while the other has the same reading throughout:
-`./solve.sh misc misc2`
+  * `./solve.sh misc misc2`
 
 Here, we search through templates of increasing complexity, looking for a unified interpretation:
-`./solve.sh eca_general predict_eca_245_b3.lp`
+  * `./solve.sh eca_general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
@@ -63,12 +63,12 @@ Occlusion:
 
 In general, solve can be run with any file in the data directory.
 The options are:
-    * `./solve.sh eca <file in data/eca>`
-    * `./solve.sh sw <file in data/sw>`
-    * `./solve.sh music <file in data/music>`
-    * `./solve.sh rhythm <file in data/rhythm>`
-    * `./solve.sh binding <file in data/binding>`
-    * `./solve.sh occlusion <file in data/binding>`
+  * `./solve.sh eca <file in data/eca>`
+  * `./solve.sh sw <file in data/sw>`
+  * `./solve.sh music <file in data/music>`
+  * `./solve.sh rhythm <file in data/rhythm>`
+  * `./solve.sh binding <file in data/binding>`
+  * `./solve.sh occlusion <file in data/binding>`
 
 ## Understanding the output of the solve process
 
@@ -82,21 +82,21 @@ When solve is run, it produces...
 * accuracy: whether or not all the predicted sensor readings match the hidden readings
 
 To generate a latex-readable description of the output:
-    * set `flag_output_latex = True` in Interpretation.hs
-    * recompile
-    * run again
+  * set `flag_output_latex = True` in Interpretation.hs
+  * recompile
+  * run again
 
 ## Data generation
 
 The data is already provided in the `data/` folder.
 
 But if you want to generate more data:
-* Compile ECA.hs, SW.hs, Music.hs, Rhythm.hs in the code directory
-* `cd code`
-* `./eca all`
-* `./sw all`
-* `./music all`
-* `./rhythm all`
+  * Compile ECA.hs, SW.hs, Music.hs, Rhythm.hs in the code directory
+  * `cd code`
+  * `./eca all`
+  * `./sw all`
+  * `./music all`
+  * `./rhythm all`
 
 
 
