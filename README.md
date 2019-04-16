@@ -5,18 +5,18 @@
 You need to have installed Haskell and Clingo.
 
 1. To install Haskell:
-    * go to https://www.haskell.org/downloads/
+   * go to https://www.haskell.org/downloads/
 
 2. To install Clingo (version 4.5 or above):
-    * go to https://potassco.org/clingo/
+   * go to https://potassco.org/clingo/
 
 ## Compilation instructions
 
 Once you have Haskell and Clingo installed, just run (from the root directory):
-    * `cd code`
-    * `cabal configure`
-    * `cabal build`
-    * `cabal install`
+   * `cd code`
+   * `cabal configure`
+   * `cabal build`
+   * `cabal install`
 
 ## Simple Examples
 
