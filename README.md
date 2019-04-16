@@ -46,7 +46,7 @@ ECA retrodiction:
 ECA imputation:
 `./solve.sh eca impute_110_b5_t14.lp`
 
-The Seek Whence "theme song" babbbbbcbbdb...
+The Seek Whence "theme song"
 `./solve.sh sw predict_3.lp`
 
 Music prediction:
