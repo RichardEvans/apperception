@@ -53,7 +53,7 @@ Music prediction:
 `./solve.sh music predict_IncyWincySpiderSmall.lp`
 
 Rhythm prediction:
-`./solve.sh rhythm predict_Mazurka.lp`
+`./solve.sh rhythm predict_Samba.lp`
 
 Binding prediction:
 `./solve.sh binding predict_r2_b5.lp`
