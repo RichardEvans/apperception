@@ -59,7 +59,7 @@ Binding prediction:
 `./solve.sh binding predict_r2_b5.lp`
 
 Occlusion:
-`./solve.sh occlusion w1`
+`./solve.sh occlusion w10`
 
 In general, solve can be run with any file in the data directory.
 The options are:
