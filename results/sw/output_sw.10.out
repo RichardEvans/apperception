@@ -1,0 +1,193 @@
+Processing data/sw/impute_19.lp.
+Processing data/sw/impute_19.lp.
+Processing data/sw/impute_19.lp.
+Processing data/sw/impute_19.lp.
+Processing data/sw/impute_19.lp.
+Processing data/sw/impute_19.lp.
+Solving sw impute_19.lp
+Num objects: 1 complexity: simple
+Generating temporary files...
+Generated temp/sw_impute_19_init.lp
+Generated temp/sw_impute_19_subs.lp
+Generated temp/sw_impute_19_var_atoms.lp
+Generated temp/sw_impute_19_interpretation.lp
+Generated temp/sw_impute_19_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 2 complexity: simple
+Generating temporary files...
+Generated temp/sw_impute_19_init.lp
+Generated temp/sw_impute_19_subs.lp
+Generated temp/sw_impute_19_var_atoms.lp
+Generated temp/sw_impute_19_interpretation.lp
+Generated temp/sw_impute_19_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 3 complexity: simple
+Generating temporary files...
+Generated temp/sw_impute_19_init.lp
+Generated temp/sw_impute_19_subs.lp
+Generated temp/sw_impute_19_var_atoms.lp
+Generated temp/sw_impute_19_interpretation.lp
+Generated temp/sw_impute_19_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 1 complexity: complex
+Generating temporary files...
+Generated temp/sw_impute_19_init.lp
+Generated temp/sw_impute_19_subs.lp
+Generated temp/sw_impute_19_var_atoms.lp
+Generated temp/sw_impute_19_interpretation.lp
+Generated temp/sw_impute_19_script.sh
+Calling clingo...
+Num objects: 2 complexity: complex
+Generating temporary files...
+Generated temp/sw_impute_19_init.lp
+Generated temp/sw_impute_19_subs.lp
+Generated temp/sw_impute_19_var_atoms.lp
+Generated temp/sw_impute_19_interpretation.lp
+Generated temp/sw_impute_19_script.sh
+Calling clingo...
+Num objects: 3 complexity: complex
+Generating temporary files...
+Generated temp/sw_impute_19_init.lp
+Generated temp/sw_impute_19_subs.lp
+Generated temp/sw_impute_19_var_atoms.lp
+Generated temp/sw_impute_19_interpretation.lp
+Generated temp/sw_impute_19_script.sh
+Calling clingo...
+-------------
+Answer
+-------------
+
+
+Initial conditions
+------------------
+
+s(c_c2,obj_sensor)
+s2(c_part_s,obj_sensor,obj_gen_1)
+s2(c_x,obj_sensor,obj_letter_a)
+s2(c_y,obj_gen_1,obj_letter_c)
+s2(c_z,obj_gen_1,obj_letter_a)
+
+Permanents
+----------
+
+isa(p_p3,obj_gen_1)
+isa2(p_part_c,obj_gen_1,obj_grid)
+isa2(p_r,obj_gen_1,obj_gen_1)
+
+Rules
+-----
+
+r1 : s2(c_letter,var_s,var_l) /\ s2(c_part_s,var_s,var_c) /\ s2(c_y,var_c2,var_l) -> s2(c_z, var_c2, var_l)
+r2 : isa(p_p3,var_c) /\ s(c_c2,var_s) /\ s2(c_x,var_s,var_l2) /\ s2(c_z,var_c2,var_l) -> s2(c_letter, var_s, var_l2)
+r3 : isa2(p_less,var_l,var_l2) /\ s(c_c1,var_s) /\ s2(c_letter,var_s,var_l) /\ s2(c_z,var_c,var_l) -> s2(c_y, var_c, var_l2)
+r4 : isa(p_p3,var_c2) /\ isa2(p_succ,var_l,var_l2) /\ s(c_c2,var_s) /\ s2(c_z,var_c,var_l) >> s2(c_z, var_c2, var_l2)
+r5 : isa2(p_succ,var_l,var_l2) /\ s2(c_part_s,var_s,var_c) /\ s2(c_z,var_c,var_l2) >> s2(c_x, var_s, var_l)
+r6 : s(c_c1,var_s) /\ s2(c_y,var_c2,var_l2) /\ s2(c_z,var_c,var_l) >> s2(c_letter, var_s, var_l2)
+r7 : isa2(p_succ,var_l,var_l2) /\ s2(c_x,var_s,var_l) /\ s2(c_y,var_c,var_l2) >> s(c_c1, var_s)
+r8 : s2(c_x,var_s,var_l) /\ s2(c_y,var_c2,var_l) /\ s2(c_z,var_c,var_l2) >> s2(c_y, var_c, var_l2)
+
+Constraints
+-----------
+
+c_c1+c_c2
+p_p1+p_p2+p_p3+p_p4
+
+Trace
+-----
+
+Time 1: 
+s(c_c2, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_a)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_a)
+s2(c_y, obj_gen_1, obj_letter_c)
+s2(c_z, obj_gen_1, obj_letter_a)
+
+Time 2: 
+s(c_c2, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_a)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_a)
+s2(c_y, obj_gen_1, obj_letter_c)
+s2(c_z, obj_gen_1, obj_letter_b)
+
+Time 3: 
+s(c_c2, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_a)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_a)
+s2(c_y, obj_gen_1, obj_letter_c)
+s2(c_z, obj_gen_1, obj_letter_c)
+
+Time 4: 
+s(c_c2, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_b)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_b)
+s2(c_y, obj_gen_1, obj_letter_c)
+s2(c_z, obj_gen_1, obj_letter_d)
+
+Time 5: 
+s(c_c1, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_b)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_c)
+s2(c_y, obj_gen_1, obj_letter_c)
+s2(c_z, obj_gen_1, obj_letter_e)
+
+Time 6: 
+s(c_c1, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_c)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_d)
+s2(c_y, obj_gen_1, obj_letter_e)
+s2(c_z, obj_gen_1, obj_letter_e)
+
+Time 7: 
+s(c_c1, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_e)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_d)
+s2(c_y, obj_gen_1, obj_letter_f)
+s2(c_z, obj_gen_1, obj_letter_e)
+
+Time 8: 
+s(c_c1, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_f)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_d)
+s2(c_y, obj_gen_1, obj_letter_f)
+s2(c_z, obj_gen_1, obj_letter_f)
+
+Time 9: 
+s(c_c1, obj_sensor)
+s2(c_letter, obj_sensor, obj_letter_f)
+s2(c_part_s, obj_sensor, obj_gen_1)
+s2(c_x, obj_sensor, obj_letter_e)
+s2(c_y, obj_gen_1, obj_letter_f)
+s2(c_z, obj_gen_1, obj_letter_f)
+
+
+Statistics
+----------
+
+Num arrow rules: 3
+Num causes rules: 5
+Total body atoms: 27
+Num inits: 8
+Total cost: 48
+Total num clauses: 16
+
+
+Accuracy
+--------
+
+Status: correct
+
+

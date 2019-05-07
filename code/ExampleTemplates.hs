@@ -7,11 +7,10 @@ import SolveTemplates
 
 misc_templates :: [(String, (String, Template, String))]
 misc_templates = [
-    ("misc1", ("data/misc", template_misc_1_1, "predict_1.lp")),
-    ("misc2", ("data/misc", template_misc_2_1, "predict_2.lp")),
-    ("misc3", ("data/misc", template_misc_3_1, "predict_3.lp")),
-    ("misc4", ("data/misc", template_misc_4_1, "predict_4.lp")),
-    ("misc5", ("data/misc", template_misc_5_1, "predict_1.lp"))
+    ("predict_1.lp", ("data/misc", template_misc_1_1, "predict_1.lp")),
+    ("predict_2.lp", ("data/misc", template_misc_2_1, "predict_2.lp")),
+    ("predict_3.lp", ("data/misc", template_misc_3_1, "predict_3.lp")),
+    ("predict_4.lp", ("data/misc", template_misc_4_1, "predict_4.lp"))
     ]
 
 example_templates :: [Template]

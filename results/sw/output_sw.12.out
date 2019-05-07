@@ -1,0 +1,68 @@
+Processing data/sw/impute_20.lp.
+Processing data/sw/impute_20.lp.
+Processing data/sw/impute_20.lp.
+Processing data/sw/impute_20.lp.
+Processing data/sw/impute_20.lp.
+Processing data/sw/impute_20.lp.
+Solving sw impute_20.lp
+Num objects: 1 complexity: simple
+Generating temporary files...
+Generated temp/sw_impute_20_init.lp
+Generated temp/sw_impute_20_subs.lp
+Generated temp/sw_impute_20_var_atoms.lp
+Generated temp/sw_impute_20_interpretation.lp
+Generated temp/sw_impute_20_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 2 complexity: simple
+Generating temporary files...
+Generated temp/sw_impute_20_init.lp
+Generated temp/sw_impute_20_subs.lp
+Generated temp/sw_impute_20_var_atoms.lp
+Generated temp/sw_impute_20_interpretation.lp
+Generated temp/sw_impute_20_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 3 complexity: simple
+Generating temporary files...
+Generated temp/sw_impute_20_init.lp
+Generated temp/sw_impute_20_subs.lp
+Generated temp/sw_impute_20_var_atoms.lp
+Generated temp/sw_impute_20_interpretation.lp
+Generated temp/sw_impute_20_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 1 complexity: complex
+Generating temporary files...
+Generated temp/sw_impute_20_init.lp
+Generated temp/sw_impute_20_subs.lp
+Generated temp/sw_impute_20_var_atoms.lp
+Generated temp/sw_impute_20_interpretation.lp
+Generated temp/sw_impute_20_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 2 complexity: complex
+Generating temporary files...
+Generated temp/sw_impute_20_init.lp
+Generated temp/sw_impute_20_subs.lp
+Generated temp/sw_impute_20_var_atoms.lp
+Generated temp/sw_impute_20_interpretation.lp
+Generated temp/sw_impute_20_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Num objects: 3 complexity: complex
+Generating temporary files...
+Generated temp/sw_impute_20_init.lp
+Generated temp/sw_impute_20_subs.lp
+Generated temp/sw_impute_20_var_atoms.lp
+Generated temp/sw_impute_20_interpretation.lp
+Generated temp/sw_impute_20_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Unable to solve impute_20.lp

@@ -1,0 +1,112 @@
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Processing data/rhythm/retrodict_Mazurka.lp.
+Solving rhythm retrodict_Mazurka.lp
+MusicConfig {num_extra_fluent_predicates = 0, num_extra_arrow_rules = 0, num_extra_causes_rules = 0, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 0, num_extra_arrow_rules = 0, num_extra_causes_rules = 4, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 0, num_extra_arrow_rules = 4, num_extra_causes_rules = 8, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 4, num_extra_arrow_rules = 4, num_extra_causes_rules = 4, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 4, num_extra_arrow_rules = 4, num_extra_causes_rules = 8, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 8, num_extra_arrow_rules = 4, num_extra_causes_rules = 8, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 8, num_extra_arrow_rules = 8, num_extra_causes_rules = 8, num_extra_body_atoms = 1}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 8, num_extra_arrow_rules = 12, num_extra_causes_rules = 12, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 8, num_extra_arrow_rules = 12, num_extra_causes_rules = 16, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+MusicConfig {num_extra_fluent_predicates = 8, num_extra_arrow_rules = 12, num_extra_causes_rules = 16, num_extra_body_atoms = 1}
+Generating temporary files...
+Generated temp/rhythm_retrodict_Mazurka_init.lp
+Generated temp/rhythm_retrodict_Mazurka_subs.lp
+Generated temp/rhythm_retrodict_Mazurka_var_atoms.lp
+Generated temp/rhythm_retrodict_Mazurka_interpretation.lp
+Generated temp/rhythm_retrodict_Mazurka_script.sh
+Calling clingo...
+No solution found for this configuration
+
+Unable to solve retrodict_Mazurka.lp

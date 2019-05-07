@@ -1,2 +1,6 @@
+*.hi
+*.o
+code/.DS_Store
+.DS_Store
 temp/
 code/dist

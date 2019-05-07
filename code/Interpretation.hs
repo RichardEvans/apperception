@@ -36,6 +36,9 @@ flag_condor = False
 flag_unicode :: Bool
 flag_unicode = False
 
+flag_delete_temp :: Bool
+flag_delete_temp = True
+
 const_time_limit :: Int
 const_time_limit = 14400
 
@@ -125,21 +128,25 @@ type TypeConceptMap = Map.Map Type [Concept]
 
 -------------------------------------------------------------------------------
 -- 
--- This key block of code generates the various ASP files from a template.
+-- This function generates the various ASP files from a template.
 -- 
 -------------------------------------------------------------------------------
 
-do_template :: Bool -> Template -> String -> String -> IO ()
+do_template :: Bool -> Template -> String -> String -> IO (String, String, String)
 do_template add_const t dir input_f = do
-    gen_inits t
-    gen_subs t
-    gen_var_atoms t
-    gen_interpretation t
-    gen_bash (dir ++ "/" ++ input_f) add_const t
+    let d = drop (length "data/") dir
+    let input = take (length input_f - length ".lp") input_f
+    let name = d ++ "_" ++ input
+    gen_inits name t
+    gen_subs name t
+    gen_var_atoms name t
+    gen_interpretation name t
+    (script, results) <- gen_bash d input add_const t
+    return (name, script, results)
 
-gen_interpretation :: Template -> IO ()
-gen_interpretation t = do
-    let f = "temp/gen_interpretation.lp"
+gen_interpretation :: String -> Template -> IO ()
+gen_interpretation name t = do
+    let f = "temp/" ++ name ++ "_interpretation.lp"
     writeFile f "% Auto-generated from GenInterpretation\n\n"
     Monad.forM_ (interpretation_lines t) (append_new_line f)
     putStrLn $ "Generated " ++ f
@@ -265,9 +272,9 @@ gen_constraints = [divider, "% Constraints", divider, "", c1] ++ c2 where
                     ""]
         False -> [":- violation_kant_condition_spatial_unity.", ""]
 
-gen_inits :: Template -> IO ()
-gen_inits t = do
-    let f = "temp/gen_init.lp"
+gen_inits :: String -> Template -> IO ()
+gen_inits name t = do
+    let f = "temp/" ++ name ++ "_init.lp"
     writeFile f "% Auto-generated from GenInterpretation\n\n"
     Monad.forM_ (all_ground_atoms t) (print_init_atom f)
     putStrLn $ "Generated " ++ f
@@ -276,31 +283,34 @@ print_init_atom :: String -> GroundAtom -> IO ()
 print_init_atom f a = appendFile f t where
     t = "{ " ++ show a ++ " } .\n"
 
-gen_bash :: String -> Bool -> Template -> IO ()
-gen_bash input_f add_const t = do
+gen_bash :: String -> String -> Bool -> Template -> IO (String, String)
+gen_bash dir input_f add_const t = do
+    let name = dir ++ "_" ++ input_f
+    let task_file = "data/" ++ dir ++ "/" ++ input_f ++ ".lp"
     let d =  "temp/"
-    let f = d ++ "gen_script.sh"
-    writeFile f $ "echo \"Processing " ++ input_f ++ ".\"\n\n"
-    let init_f = d ++ "gen_init.lp"
-    let subs_f = d ++ "gen_subs.lp"
-    let rules_f = d ++ "gen_var_atoms.lp"
-    let interpretation_f = d ++ "gen_interpretation.lp"
+    let f = d ++ name ++ "_script.sh"
+    writeFile f $ "echo \"Processing " ++ task_file ++ ".\"\n\n"
+    let init_f = d ++ name ++ "_init.lp"
+    let subs_f = d ++ name ++ "_subs.lp"
+    let rules_f = d ++ name ++ "_var_atoms.lp"
+    let interpretation_f = d ++ name ++ "_interpretation.lp"
     let auxs = map (\x -> "asp/" ++ x) (aux_files (frame t))
     let aux_s = concat (List.intersperse " " auxs)
-    let results_f = "temp/results.txt"
+    let results_f = d ++ name ++ "_results.txt"
     let handle = " > " ++ results_f
     let args = "--warn=no-atom-undefined --time-limit=" ++ show const_time_limit ++ " "
     let args' = if add_const then args ++ "-c k_xor_group=$1 " ++ xor_group_file_name ++ " " else args
     let clingo = if flag_condor then "/vol/lab/clingo5/clingo " else "clingo "
     let costs = if flag_ablation_remove_cost then " " else " asp/costs.lp " 
-    let s = clingo ++ args' ++ input_f ++ " " ++ init_f ++ " " ++ subs_f ++ " " ++ rules_f ++ " " ++ interpretation_f ++ " " ++ aux_s ++ " " ++ " asp/judgement.lp asp/constraints.lp" ++ costs ++ handle ++ "\n\n"
+    let s = clingo ++ args' ++ task_file ++ " " ++ init_f ++ " " ++ subs_f ++ " " ++ rules_f ++ " " ++ interpretation_f ++ " " ++ aux_s ++ " " ++ " asp/judgement.lp asp/constraints.lp" ++ costs ++ handle ++ "\n\n"
     appendFile f s
     putStrLn $ "Generated " ++ f
     Process.callCommand ("chmod 777 " ++ f)
+    return (f, results_f)
 
-gen_subs :: Template -> IO ()
-gen_subs t = do
-    let f = "temp/gen_subs.lp"
+gen_subs :: String -> Template -> IO ()
+gen_subs name t = do
+    let f = "temp/" ++ name ++ "_subs.lp"
     writeFile f "% Auto-generated from GenInterpretation\n\n"
     appendFile f ("%-----------\n")
     appendFile f ("% var_types\n")
@@ -339,9 +349,9 @@ print_subs f name (i, subs) = do
         appendFile f $ "subs(subs_" ++ name ++ "_" ++ show i ++ ", " ++ show v ++ ", " ++ show x ++ ").\n"
     appendFile f "\n"
 
-gen_var_atoms :: Template -> IO ()
-gen_var_atoms t = do
-    let f = "temp/gen_var_atoms.lp"
+gen_var_atoms :: String -> Template -> IO ()
+gen_var_atoms name t = do
+    let f = "temp/" ++ name ++ "_var_atoms.lp"
     writeFile f "% Auto-generated from GenInterpretation\n\n"
     let frm = frame t
     Monad.forM_ (all_var_fluents frm) (print_var_fluent f frm)

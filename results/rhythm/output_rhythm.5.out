@@ -1,0 +1,753 @@
+Processing data/rhythm/impute_FolkRock.lp.
+Solving rhythm impute_FolkRock.lp
+MusicConfig {num_extra_fluent_predicates = 0, num_extra_arrow_rules = 0, num_extra_causes_rules = 0, num_extra_body_atoms = 0}
+Generating temporary files...
+Generated temp/rhythm_impute_FolkRock_init.lp
+Generated temp/rhythm_impute_FolkRock_subs.lp
+Generated temp/rhythm_impute_FolkRock_var_atoms.lp
+Generated temp/rhythm_impute_FolkRock_interpretation.lp
+Generated temp/rhythm_impute_FolkRock_script.sh
+Calling clingo...
+-------------
+Answer
+-------------
+
+
+Initial conditions
+------------------
+
+s(c_q1,obj_sensor_bass_drum)
+s(c_q1,obj_sensor_hi_hat)
+s(c_q1,obj_sensor_snare_drum)
+s(c_q3,obj_sensor_hi_hat)
+s(c_q3,obj_sensor_snare_drum)
+s2(c_loudness,obj_sensor_bass_drum,obj_loudness_3)
+s2(c_loudness,obj_sensor_hi_hat,obj_loudness_3)
+s2(c_loudness,obj_sensor_snare_drum,obj_loudness_0)
+s2(c_val,obj_sensor_bass_drum,obj_num_2)
+
+Permanents
+----------
+
+isa(p_is_bass_drum,obj_sensor_bass_drum)
+isa(p_is_hi_hat,obj_sensor_hi_hat)
+isa(p_is_snare_drum,obj_sensor_snare_drum)
+isa2(p_part_s,obj_sensor_bass_drum,obj_grid)
+isa2(p_part_s,obj_sensor_hi_hat,obj_grid)
+isa2(p_part_s,obj_sensor_snare_drum,obj_grid)
+
+Rules
+-----
+
+r1 : isa(p_is_2,var_n2) /\ isa(p_is_3,var_n) /\ s(c_q3,var_s) /\ s2(c_val,var_s,var_n2) -> s(c_q2, var_s)
+r2 : isa(p_is_2,var_n) /\ isa(p_is_3,var_n) /\ isa2(p_num_succ,var_n,var_n2) /\ s(c_q1,var_s) -> s2(c_val, var_s, var_n2)
+r3 : isa(p_is_3,var_n) /\ isa2(p_num_succ,var_n2,var_n) /\ s(c_q1,var_s) /\ s2(c_val,var_s,var_n2) -> s(c_q4, var_s)
+r4 : isa(p_is_0,var_n2) /\ isa(p_is_3,var_n) /\ s(c_q1,var_s) /\ s(c_q3,var_s) -> s2(c_val, var_s, var_n)
+r10 : s(c_q2,var_s) >> s(c_q3, var_s)
+r11 : isa(p_max_loudness,var_l) /\ isa2(p_succ,var_l2,var_l) /\ s(c_q1,var_s) /\ s2(c_loudness,var_s,var_l2) >> s2(c_loudness, var_s, var_l)
+r12 : isa(p_max_loudness,var_l2) /\ isa2(p_succ,var_l,var_l2) /\ s2(c_loudness,var_s,var_l2) >> s2(c_loudness, var_s, var_l)
+r5 : s(c_q2,var_s) >> s(c_q1, var_s)
+r6 : isa(p_max_loudness,var_l) /\ isa(p_min_loudness,var_l2) /\ s(c_q4,var_s) /\ s2(c_loudness,var_s,var_l2) >> s2(c_loudness, var_s, var_l)
+r7 : isa(p_is_2,var_n) /\ isa(p_is_2,var_n2) /\ s(c_q1,var_s) /\ s(c_q3,var_s) >> s2(c_val, var_s, var_n2)
+r8 : isa(p_min_loudness,var_l) /\ s(c_q4,var_s) >> s(c_q3, var_s)
+r9 : isa2(p_succ,var_l,var_l2) /\ s(c_q3,var_s) /\ s2(c_loudness,var_s,var_l2) >> s2(c_loudness, var_s, var_l)
+
+Constraints
+-----------
+
+c_q1+c_q2
+c_q3+c_q4
+
+Trace
+-----
+
+Time 1: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 2: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 3: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_1)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 4: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 5: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_3)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 6: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_2)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 7: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_1)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 8: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 9: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 10: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 11: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_1)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_3)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 12: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_2)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 13: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_1)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 14: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 15: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 16: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 17: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 18: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 19: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_1)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 20: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 21: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_3)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 22: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_2)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 23: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_1)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 24: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 25: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 26: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 27: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_1)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_3)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 28: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_2)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 29: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_1)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 30: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 31: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 32: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 33: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 34: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 35: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_1)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 36: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 37: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_3)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 38: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_2)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 39: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_1)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 40: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 41: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_3)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 42: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_2)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 43: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_1)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_3)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 44: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_2)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 45: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_1)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 46: 
+s(c_q1, obj_sensor_hi_hat)
+s(c_q2, obj_sensor_bass_drum)
+s(c_q2, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_snare_drum)
+s(c_q4, obj_sensor_hi_hat)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+Time 47: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_hi_hat)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q3, obj_sensor_bass_drum)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_3)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_3)
+s2(c_val, obj_sensor_hi_hat, obj_num_3)
+s2(c_val, obj_sensor_snare_drum, obj_num_3)
+
+Time 48: 
+s(c_q1, obj_sensor_bass_drum)
+s(c_q1, obj_sensor_snare_drum)
+s(c_q2, obj_sensor_hi_hat)
+s(c_q3, obj_sensor_hi_hat)
+s(c_q4, obj_sensor_bass_drum)
+s(c_q4, obj_sensor_snare_drum)
+s2(c_loudness, obj_sensor_bass_drum, obj_loudness_0)
+s2(c_loudness, obj_sensor_hi_hat, obj_loudness_2)
+s2(c_loudness, obj_sensor_snare_drum, obj_loudness_0)
+s2(c_val, obj_sensor_bass_drum, obj_num_2)
+s2(c_val, obj_sensor_hi_hat, obj_num_2)
+s2(c_val, obj_sensor_snare_drum, obj_num_2)
+
+
+Statistics
+----------
+
+Num arrow rules: 4
+Num causes rules: 8
+Total body atoms: 38
+Num inits: 15
+Total cost: 73
+Total num clauses: 27
+
+
+Accuracy
+--------
+
+Status: correct
+
+

@@ -559,19 +559,25 @@ do_solve :: String -> String -> Template -> IO (String, [ClingoOutput])
 do_solve dir input_f t = do
     -- Generate ASP files from template
     putStrLn "Generating temporary files..."
-    do_template False t dir input_f 
+    (name, command, results) <- do_template False t dir input_f 
 
     -- Call ASP solver
     putStrLn "Calling clingo..."    
-    let command = "temp/gen_script.sh"
     Exception.catch (Process.callCommand command) handle_command_exception
 
     -- Process output
-    let results_f = "temp/results.txt"
-    l <- readFile results_f
+    l <- readFile results
     let ls = lines l
     let ls2 = get_answers ls []    
-    return (results_f, ls2)
+
+    -- Clean up
+    case flag_delete_temp of
+        True -> do
+            let c = "rm temp/" ++ name ++ "_*"
+            Process.callCommand c
+        False -> return ()
+
+    return (results, ls2)
 
 -- Calling the system command raises an exception...
 -- but the command executes properly...
@@ -597,7 +603,8 @@ generate_eca_with_extra_vars n = do
     let t = template_eca_n False 11
     let frame' = (frame t) { vars = vars', var_groups = vgs} 
     let t'= t { frame = frame'}
-    do_template False t' "TODO" "TODO"
+    _ <- do_template False t' "TODO" "TODO"
+    return ()
 
 generate_music_with_increasing_vars :: IO ()
 generate_music_with_increasing_vars = Monad.forM_ [1 .. 10] generate_music_with_extra_vars
@@ -616,5 +623,6 @@ generate_music_with_extra_vars n = do
     let t = template_music
     let frame' = (frame t) { vars = vars', var_groups = vgs} 
     let t'= t { frame = frame'}
-    do_template False t' "TODO" "TODO"
+    _ <- do_template False t' "TODO" "TODO"
+    return ()
 

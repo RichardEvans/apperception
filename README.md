@@ -25,41 +25,41 @@ Once the system is installed (see above), you are ready to try some examples.
 To run these examples, make sure you are in the root directory.
 
 In this simple example, there is a single sensor oscillating between on and off:
-`./solve.sh misc misc1`
+`scripts/solve.sh misc predict_1.lp`
 
 In this example, there are two sensors. One oscillates between on and off, while the other has the same reading throughout:
-`./solve.sh misc misc2`
+`scripts/solve.sh misc predict_2.lp`
 
 Here, we search through templates of increasing complexity, looking for a unified interpretation:
-`./solve.sh eca_general predict_eca_245_b3.lp`
+`scripts/solve.sh eca_general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
-These examples take significantly longer to run than the simple examples above. There is a time-limit of 4 hours per template. 
+The following examples take significantly longer to run than the simple examples above. But all examples terminate within 24 hours (on a standard MacBook).
 
 ECA prediction:
-`./solve.sh eca predict_110_b5_t14.lp`
+`scripts/solve.sh eca predict_110_b5_t14.lp`
 
 ECA retrodiction:
-`./solve.sh eca retrodict_110_b5_t14.lp`
+`scripts/solve.sh eca retrodict_110_b5_t14.lp`
 
 ECA imputation:
-`./solve.sh eca impute_110_b5_t14.lp`
+`scripts/solve.sh eca impute_110_b5_t14.lp`
 
 The Seek Whence "theme song" babbbbbcbbdb...
-`./solve.sh sw predict_3.lp`
+`scripts/solve.sh sw predict_3.lp`
 
 Music prediction:
-`./solve.sh music predict_IncyWincySpiderSmall.lp`
+`scripts/solve.sh music predict_IncyWincySpiderSmall.lp`
 
 Rhythm prediction:
-`./solve.sh rhythm predict_Mazurka.lp`
+`scripts/solve.sh rhythm predict_Mazurka.lp`
 
 Binding prediction:
-`./solve.sh binding predict_r2_b5.lp`
+`scripts/solve.sh binding predict_r2_b5.lp`
 
 Occlusion:
-`./solve.sh occlusion w1`
+`scripts/solve.sh occlusion w1`
 
 In general, solve can be run with any file in the data directory.
 The options are:
@@ -85,6 +85,10 @@ To generate a latex-readable description of the output:
     * set `flag_output_latex = True` in Interpretation.hs
     * recompile
     * run again
+
+## Precomputed results
+
+The experimental results described in the paper are stored in the results folder.
 
 ## Data generation
 
