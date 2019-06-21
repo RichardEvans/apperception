@@ -102,5 +102,11 @@ But if you want to generate more data:
   * `./music all`
   * `./rhythm all`
 
+## Videos
+
+There are four videos in the `videos/` folder:
+  * example1.gif, example2.gif, and example3.gif are three ways of interpreting Example 9 in the paper
+  * theme-song.gif is a representation of the interpretation in Figure 7 in Section 5.3 of the paper
+
 
 
