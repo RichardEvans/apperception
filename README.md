@@ -7,19 +7,16 @@ You need to have installed Haskell and Clingo (version 4.5 or above).
 1. To install Haskell:
     * go to https://www.haskell.org/downloads/
 
-2. You also need to install various additional Haskell libraries:
-    * `cabal install Cabal cabal-install`
-    * cabal install <TODO>
-
-3. To install Clingo:
+2. To install Clingo (version 4.5 or above):
     * go to https://potassco.org/clingo/
 
 ## Compilation instructions
 
-Once you have clingo installed, Haskell installed, and also
-the addition Haskell libraries, just run (from the root directory):
-
-`scripts/compile_all.sh`
+Once you have Haskell and Clingo installed, just run (from the root directory):
+   * `cd code`
+   * `cabal configure`
+   * `cabal build`
+   * `cabal install`
 
 ## Simple Examples
 
@@ -86,7 +83,7 @@ The options are:
 ## Understanding the output of the solve process
 
 When solve is run, it produces...
-* the theory *θ* composed of...
+* the theory *θ = (φ, I, R, C)* composed of...
     * the initial conditions (*I*)
     * the rules (*R*)
     * the constraints (*C*)
