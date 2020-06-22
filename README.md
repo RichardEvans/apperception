@@ -34,7 +34,7 @@ Exogenous action:
 `code/solve misc exog_1.lp`
 
 Searching through templates of increasing complexity, looking for a unified interpretation:
-`code/solve eca_general predict_eca_245_b3.lp`
+`code/solve eca-general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
