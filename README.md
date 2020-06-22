@@ -64,10 +64,10 @@ Binding prediction:
 Occlusion:
 `code/solve occlusion w1`
 
-Mislabelled data:
+Mislabelled data (noise):
 `code/solve mislabel predict_1_100_0_1.lp`
 
-Noisy sequences:
+Fuzzy sequences:
 `code/solve noisy 1 3 2`
 
 Sokoban from pixels:
