@@ -64,11 +64,14 @@ Binding prediction:
 Occlusion:
 `code/solve occlusion w1`
 
-Walker:
-`code/solve walker predict w0`
+Mislabelled data:
+`code/solve mislabel predict_1_100_0_1.lp`
 
 Noisy sequences:
 `code/solve noisy 1 3 2'
+
+Sokoban from pixels:
+'code/solve sok-pixels e_9_17'
 
 In general, solve can be run with any file in the data directory.
 The options are:
