@@ -22,7 +22,7 @@ Once you have Haskell and Clingo installed, just run (from the root directory):
 
 Once the system is installed (see above), you are ready to try some examples.
 
-To run these examples, make sure you are in the root directory.
+To run these examples, **make sure you are in the root directory**.
 
 A single sensor oscillating between on and off:
 `code/solve misc predict_1.lp`
