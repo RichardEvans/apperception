@@ -25,16 +25,16 @@ Once the system is installed (see above), you are ready to try some examples.
 To run these examples, **make sure you are in the root directory**.
 
 A single sensor oscillating between on and off:
-`code/solve misc predict_1.lp`
+   * `code/solve misc predict_1.lp`
 
 Two sensors, one oscillates between on and off, while the other has the same reading throughout:
-`code/solve misc predict_2.lp`
+   * `code/solve misc predict_2.lp`
 
 Exogenous action:
-`code/solve misc exog_1.lp`
+   * `code/solve misc exog_1.lp`
 
 Searching through templates of increasing complexity, looking for a unified interpretation:
-`code/solve eca-general predict_eca_245_b3.lp`
+   * `code/solve eca-general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
