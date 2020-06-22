@@ -142,7 +142,44 @@ incorrect :-
     not holds(A, T).
 
 correct :- not incorrect.
-    
+
+%------------------------------------------------------------------------------
+% Correctness of held-outs for pixel arrays
+%------------------------------------------------------------------------------
+
+incorrect :- incorrect_at(T).
+
+incorrect_at(T) :- 
+    test_sprite_at(T, C, S),
+    not possible_sprite_at(T, C, S).
+
+incorrect_at(T) :-
+    impossible_combination_satisfied(T, N).
+
+impossible_combination_satisfied(T, N) :-
+    is_impossible_combination(T, N),
+    not unsat(T, N).
+
+unsat(T, N) :-
+    test_impossible_combination(T, N, C, S),
+    not possible_sprite_at(T, C, S).
+
+is_impossible_combination(T, N) :- test_impossible_combination(T, N, _, _).
+
+%%%
+
+count_num_inaccurate(N) :- 
+    N = #count { T : incorrect_at(T) }.
+
+count_num_accurate(X-Y) :- 
+    count_num_held_out_time_steps(X), count_num_inaccurate(Y).
+
+count_num_held_out_time_steps(N) :- 
+    N = #count { T : is_held_out_time_step(T) }.
+
+is_held_out_time_step(T) :- 
+    test_sprite_at(T, _, _).
+
 %------------------------------------------------------------------------------
 % Redundant constraints
 %------------------------------------------------------------------------------

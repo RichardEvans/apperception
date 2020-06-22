@@ -37,7 +37,7 @@ flag_unicode :: Bool
 flag_unicode = False
 
 flag_delete_temp :: Bool
-flag_delete_temp = True
+flag_delete_temp = False
 
 const_time_limit :: Int
 const_time_limit = 14400
@@ -62,6 +62,7 @@ data Frame = Frame {
     permanent_concepts :: [(Concept, ConceptLineage, [Type])],
     fluid_concepts :: [(Concept, [Type])],
     input_concepts :: [Concept],
+    static_concepts :: [Concept], -- concepts that don't feature in frame axiom
     vars :: [(Var, Type)],
     var_groups :: [[Var]],
     aux_files :: [String]
@@ -73,7 +74,9 @@ data Template = Template {
     min_body_atoms :: Int,
     max_body_atoms :: Int,
     num_arrow_rules :: Int,
-    num_causes_rules :: Int
+    num_causes_rules :: Int,
+    num_visual_predicates :: Maybe Int,
+    use_noise :: Bool
 } deriving (Eq, Ord, Show)
 
 data GroundAtom =   GA Concept [Object] |
@@ -98,7 +101,10 @@ data InterpretationStatistics = IS {
     num_used_arrow_rules :: Int,
     num_used_causes_rules :: Int,
     total_body_atoms :: Int,
-    num_inits :: Int
+    num_inits :: Int,
+    bnn_entropy :: Maybe Float,
+    ambiguity :: Maybe Int,
+    possible_preds :: [String]
 }
 
 data Interpretation = I {
@@ -110,7 +116,10 @@ data Interpretation = I {
     permanents :: [Atom],
     rules :: [Rule],
     facts :: [(Int, [Atom])],
+    forces :: [(Int, [Atom])],
     correct :: Bool,
+    num_accurate :: Maybe Int,
+    num_held_outs :: Maybe Int,
     statistics :: InterpretationStatistics
 }
 
@@ -155,12 +164,15 @@ append_new_line :: String -> String -> IO ()
 append_new_line f s = appendFile f (s ++ "\n")
 
 interpretation_lines :: Template -> [String]
-interpretation_lines t = es ++ ts ++ crs ++ urs ++ cs ++ stats where
+interpretation_lines t = es ++ ts ++ crs ++ urs ++ cs ++ vs ++ stats where
     es = gen_elements (frame t)
     ts = gen_typing t
     (crs, n) = gen_conceptual_rules t
     urs = gen_update_rules t n
-    cs = gen_constraints
+    cs = gen_constraints t
+    vs = case num_visual_predicates t of
+        Nothing -> []
+        Just _ -> gen_visual_code t
     stats = [
         divider, "% Stats", divider, "",
         "num_objects(" ++ show (length (get_objects t)) ++ ").", 
@@ -169,11 +181,13 @@ interpretation_lines t = es ++ ts ++ crs ++ urs ++ cs ++ stats where
 
 gen_elements :: Frame -> [String]
 gen_elements t = [divider, "% Elements", divider, ""] ++ xs where
-    xs = cs ++ cs2 ++ ts ++ [""]
+    xs = cs ++ cs2 ++ ss ++ ts ++ [""]
     cs = map g (fluid_concepts t)
     g (x, _) = "is_concept(" ++ show x ++ ")."
     cs2 = map g2 (permanent_concepts t)
     g2 (x, _, _) = "is_concept(" ++ show x ++ ")."
+    ss = map g3 (static_concepts t)
+    g3 x = "is_static_concept(" ++ show x ++ ")."
     ts = map h (types t)
     h x = "is_type(" ++ show x ++ ")."
 
@@ -262,22 +276,32 @@ gen_update_rules t n = h ++ cs ++ arrows ++ causes ++ uses ++ [""] where
 divider :: String
 divider = "%------------------------------------------------------------------------------"
 
-gen_constraints :: [String]
-gen_constraints = [divider, "% Constraints", divider, "", c1] ++ c2 where
+gen_constraints :: Template -> [String]
+gen_constraints t = [divider, "% Constraints", divider, ""] ++ c1 ++ c2 where
     c1 = case flag_ablation_remove_kant_condition_blind_sense of
-        True -> "% [Ignoring Kantian blind sense condition]"
-        False -> ":- violation_kant_condition_blind_sense."
+        True -> ["% [Ignoring Kantian blind sense condition]"]
+        False -> case use_noise t of
+            True -> ["% Adding noise", ":~ senses(S, T), not holds(S, T). [1 @ 1, S, T]"]
+            False -> [":- violation_kant_condition_blind_sense."]
     c2 = case flag_ablation_remove_kant_condition_spatial_unity of
         True -> ["% [Ignoring Kantian spatial unity condition]",
                     ""]
         False -> [":- violation_kant_condition_spatial_unity.", ""]
+    c3 = case use_noise t of
+        True -> ["% Adding noise", "flag_is_using_noise."]
+        False -> []
 
 gen_inits :: String -> Template -> IO ()
 gen_inits name t = do
     let f = "temp/" ++ name ++ "_init.lp"
     writeFile f "% Auto-generated from GenInterpretation\n\n"
-    Monad.forM_ (all_ground_atoms t) (print_init_atom f)
+    let as = filter (\a -> not (is_static_atom t a)) (all_ground_atoms t)
+    Monad.forM_ as (print_init_atom f)
     putStrLn $ "Generated " ++ f
+
+is_static_atom :: Template -> GroundAtom -> Bool
+is_static_atom t (GA c _) = c `elem` (static_concepts (frame t))
+is_static_atom t (Perm c _) = c `elem` (static_concepts (frame t))
 
 print_init_atom :: String -> GroundAtom -> IO ()
 print_init_atom f a = appendFile f t where
@@ -743,17 +767,6 @@ show_answer_set = False
 show_extraction :: Bool
 show_extraction = True
 
-process_answer :: ClingoOutput -> String    
-process_answer (Answer l) = unlines (res1 ++ res2) where
-    res1 = [h,x,h,""] ++ if show_answer_set then xs else []
-    x = "Answer"
-    h = "-------------"
-    ws = words l
-    xs = List.sort ws ++ [""]
-    xs2 = filter (\x -> not ("wibble" `List.isInfixOf` x)) xs
-    res2 = if show_extraction then readable_interpretation (extract_interpretation xs2) else []
-process_answer (Optimization l) = ""
-
 process_answer_with_template :: Template -> ClingoOutput -> String    
 process_answer_with_template t (Answer l) = unlines (res1 ++ res2) where
     res1 = [h,x,h,""] ++ if show_answer_set then xs else []
@@ -763,14 +776,14 @@ process_answer_with_template t (Answer l) = unlines (res1 ++ res2) where
     xs = List.sort ws ++ [""]
     xs2 = filter (\x -> not ("wibble" `List.isInfixOf` x)) xs
     res2 = if show_extraction then (show_interpretation t) (extract_interpretation xs2) else []
-process_answer_with_template _ (Optimization l) = ""
+process_answer_with_template _ (Optimization l) = "Optimization: " ++ l
 
 show_interpretation :: Template -> Interpretation -> [String]
-show_interpretation t i | flag_output_latex == True = readable_interpretation i ++ latex_output t i
-show_interpretation t i | flag_output_latex == False = readable_interpretation i
+show_interpretation t i | flag_output_latex == True = readable_interpretation t i ++ latex_output t i
+show_interpretation t i | flag_output_latex == False = readable_interpretation t i
 
-readable_interpretation :: Interpretation -> [String]
-readable_interpretation i = is ++ ps ++ rs ++ xs ++ fs ++ ss ++ cs where
+readable_interpretation :: Template -> Interpretation -> [String]
+readable_interpretation t i = is ++ ps ++ rs ++ xs ++ fs ++ ss ++ cs ++ acs where
     is = case inits i of
         [] -> []
         ins -> "" : "Initial conditions" : "------------------" : "" : ins
@@ -783,6 +796,9 @@ readable_interpretation i = is ++ ps ++ rs ++ xs ++ fs ++ ss ++ cs where
         _ -> "" : "Constraints" : "-----------" : "" : exclusions i
     fs = ["", "Trace", "-----", ""] ++ map show_facts (facts i)
     cs = ["", "Accuracy", "--------", "", if correct i then "Status: correct" else "Status: incorrect"]
+    acs = case (num_accurate i, num_held_outs i) of
+        (Just acc, Just tot) -> let p = fromIntegral acc / fromIntegral tot :: Float in ["", "Percentage accurate: " ++ show p ++ ""]
+        _ -> []
     ss = readable_stats (statistics i)
 
 extract_interpretation :: [String] -> Interpretation
@@ -795,7 +811,10 @@ extract_interpretation xs = I {
     permanents = extract_permanents xs,
     rules = extract_rules xs, 
     facts = extract_facts xs,
+    forces = extract_forces xs,
     correct = extract_correct xs,
+    num_accurate = extract_num_accurate xs,
+    num_held_outs = extract_num_held_outs xs,
     statistics = extract_statistics xs
 }
 
@@ -810,9 +829,20 @@ readable_stats i = [
     "Total body atoms: " ++ show (total_body_atoms i),
     "Num inits: " ++ show (num_inits i),
     "Total cost: " ++ show (total_cost i),
-    "Total num clauses: " ++ show (total_num_clauses i),
-    ""
-    ]
+    "Total num clauses: " ++ show (total_num_clauses i)
+    ] ++ (case bnn_entropy i of
+        Nothing -> []
+        Just e -> ["Entropy of bnn : " ++ show e]) ++ 
+        (case ambiguity i of
+            Nothing -> [""]
+            Just a -> ["Ambiguity: " ++ show a, ""]) ++
+        (case possible_preds i of
+            [] -> [""]
+            ps -> "BNN" : "----" : "": map show_pp ps
+        )
+
+show_pp :: String -> String
+show_pp p = "possible_pred(" ++ p ++ ")."
 
 latex_stats_table :: InterpretationStatistics -> String    
 latex_stats_table i = 
@@ -826,7 +856,7 @@ latex_stats_table i =
 total_cost :: InterpretationStatistics -> Int    
 total_cost i = 
     num_used_arrow_rules i + 
-    num_used_causes_rules i * 2 + 
+    num_used_causes_rules i + 
     total_body_atoms i +
     num_inits i
 
@@ -841,8 +871,58 @@ extract_statistics xs = IS {
     num_used_arrow_rules = extract_num_used_arrow_rules xs,
     num_used_causes_rules = extract_num_used_causes_rules xs,
     total_body_atoms = extract_total_body_atoms xs,
-    num_inits = extract_num_inits xs + extract_num_gen_permanents xs
+    num_inits = extract_num_inits xs + extract_num_gen_permanents xs,
+    bnn_entropy = extract_bnn_entropy xs,
+    ambiguity = extract_ambiguity xs,
+    possible_preds = extract_possible_preds xs
     } 
+
+extract_ambiguity :: [String] -> Maybe Int
+extract_ambiguity ss = case extract_atoms "possible_pred(" ss of
+    [] -> Nothing
+    pps -> Just (extract_ambiguity2 pps)
+
+extract_ambiguity2 :: [String] -> Int        
+extract_ambiguity2 pps = n where
+    pps2 = map (\s -> bimble_split s ',') pps
+    pps3 = map f pps2
+    f [x,y] = (x,y)
+    m = make_map pps3
+    m2 = map g (Map.toList m)
+    g (_, bs) = length bs - 1
+    n = sum m2
+
+extract_possible_preds :: [String] -> [String]    
+extract_possible_preds ss = extract_atoms "possible_pred(" ss
+
+make_map :: Ord a => [(a, b)] -> Map.Map a [b]
+make_map ps = List.foldl' f Map.empty ps where
+    f m (a, b) = case Map.lookup a m of
+        Nothing -> Map.insert a [b] m
+        Just bs -> Map.insert a (b:bs) m
+
+extract_bnn_entropy :: [String] -> Maybe Float
+extract_bnn_entropy ss = 
+    case (bnn_es, possible_preds) of
+        ([], _) -> Nothing
+        (cs, pps) -> Just (calculate_entropy cs pps num_bvs)
+    where
+        bnn_es = extract_atoms "count_bnn_examples_per_predicate(" ss
+        possible_preds = extract_atoms "is_possible_pred(" ss
+        num_bvs = extract_atoms "num_bvs(" ss
+
+calculate_entropy :: [String] -> [String] -> [String] -> Float        
+calculate_entropy ss pps num_bvs_string= e where
+    num_bvs = read (head num_bvs_string) :: Int
+    ss' = map (\s -> bimble_split s ',') ss
+    ns = map (\x -> x !! 1) ss'
+    n = map read ns :: [Int]
+    fs = map fromIntegral n :: [Float]
+    tot = fromIntegral num_bvs :: Float
+    dist = map ( / tot) fs
+    b = fromIntegral (length pps) :: Float
+    xs = map (\p -> if p <= 0.0 then 0.0 else - p * logBase b p) dist
+    e = if b <= 1 then 0.0 else sum xs :: Float
 
 extract_num_used_arrow_rules xs = length (extract_atoms "used_arrow_rule(" xs)
 extract_num_used_causes_rules xs = length (extract_atoms "used_causes_rule(" xs)
@@ -860,6 +940,15 @@ extract_exclusions xs = Maybe.mapMaybe f xs where
     f x = case List.isPrefixOf p x of
         False -> Nothing
         True -> Just $ drop_last (drop_last (List.drop (length p) x))
+
+extract_num_accurate = extract_maybe_int "count_num_accurate("
+extract_num_held_outs = extract_maybe_int "count_num_held_out_time_steps("
+
+extract_maybe_int :: String -> [String] -> Maybe Int
+extract_maybe_int p xs = case extract_atoms p xs of
+    [] -> Nothing
+    [x] -> Just (read x)
+    _ -> error "Unexpected multiple strings matching pattern"
 
 extract_times = extract_atoms "is_time("
 extract_senses = extract_atoms "senses("
@@ -961,11 +1050,13 @@ drop_last :: [a] -> [a]
 drop_last x = reverse (List.drop 1 (reverse x))
 
 extract_facts :: [String] -> [(Int, [Atom])]
-extract_facts = bring_together . extract_holds
+extract_facts = bring_together . (extract_pred "holds(")
 
-extract_holds :: [String] -> [(Int, Atom)]
-extract_holds xs = Maybe.mapMaybe f xs where
-    p = "holds("
+extract_forces :: [String] -> [(Int, [Atom])]
+extract_forces = bring_together . (extract_pred "force(")
+
+extract_pred :: String -> [String] -> [(Int, Atom)]
+extract_pred p xs = Maybe.mapMaybe f xs where
     f x = case List.isPrefixOf p x of
         False -> Nothing
         True -> Just $ 
@@ -1510,4 +1601,132 @@ all_objects_of_type template t = Maybe.mapMaybe f (get_objects template) where
     f (x, t') = case (t', t) `elem` sub_types_star (frame template) of
         True -> Just x
         False -> Nothing
+
+-------------------------------------------------------------------------------
+-- 
+-- Unary predicate assignments
+-- 
+-- Given a set P = {P1, ..., Pn} of unary predicates,
+-- and a set X = {x1, ..., xm} of objects,
+-- generate all total mappings m : X → P such that...
+--  (i) surjection: for all p in P, there is some x in X such that m(x) = p
+--  (ii) ordering: if m(x_i) = i', m(x_j) = j' and i <= j then i' <= j'
+--  (iii) if i <= j then |{x | m(x) = p_i}| <= |{x | m(x) = p_j}|
+-------------------------------------------------------------------------------
+all_unary_predicate_assignments :: Int -> Int -> [[Int]]
+all_unary_predicate_assignments num_preds num_objs | num_preds > num_objs = error "This function not well formed when num_preds exceeds num_objs"
+all_unary_predicate_assignments num_preds num_objs = filter f ls where
+    ls = all_lists_from_1_of_length_2 [1..num_preds] num_objs
+    f l = cond1 l && cond2 l && cond3 l
+    cond1 l = all (g l) [1 .. num_preds]
+    g l p = p `elem` l
+    cond2 l = all (h l) ps
+    ps = [(i, j) | i <- [0 .. num_objs-1], j <- [0 .. num_objs-1], i <= j]
+    h l (i, j) = l !! i <= l !! j
+    cond3 l = all (check_len l) [1 .. num_preds - 1]
+    check_len l i = count_ps l i <= count_ps l (i+1)
+    count_ps l p = length [i | i <- [0 .. length l - 1], l !! i == p]
+
+all_lists_from_1_of_length_2 :: [a] -> Int -> [[a]]    
+all_lists_from_1_of_length_2 xs 0 = [[]]
+all_lists_from_1_of_length_2 xs n = ls where
+    ls = [(x : ls') | x <- xs, ls' <- all_lists_from_1_of_length_2 xs (n-1)]
+
+-- Given a set of objects and a number of visual predicates,
+-- generate the code for each mapping, 
+-- plus the choice rule to decide between the mappings.
+gen_visual_mappings :: [String] -> Int -> [String]
+gen_visual_mappings objs num_preds = choice_rule ++ concat (map f zms) where
+    ms = all_unary_predicate_assignments num_preds (length objs)
+    choice_rule = [
+        "1 { visual_mapping(M) : in_visual_mapping_range(M) } 1.", 
+        "",
+        "in_visual_mapping_range(1.." ++ show (length ms) ++ ")."
+        ]
+    f (i, m) = map (g i) (zip objs m)
+    zms = zip [1..] ms
+    g i (obj, p) = "is_visual_type(" ++ obj ++ ", " ++ "vt_type_" ++ show p ++ ") :- visual_mapping(" ++ show i ++ ")."
+
+-- Given a set of objects and a number of visual predicates,
+-- generate all the ASP code for low-level visual interpretation
+-- that depends on the number of visual predicates
+gen_visual_code :: Template -> [String]
+gen_visual_code t = h ++ gen_visual_mappings objs num_preds ++ sprite_type_text num_preds ++ looks_constraints_text num_preds ++ bnn_text num_preds ++ [""] ++ visual_sokoban_clauses t where
+    h = [divider, "% Low-level visual processing", divider, ""]
+    Just num_preds = num_visual_predicates t
+    objs = Maybe.mapMaybe f (objects (frame t))
+    f (O obj, _) | obj !! 0 /= 'c' = Just (show (O obj))
+    f _ = Nothing
+
+-- We assume all types other than "cell" are types of object.
+-- This code is specific to Sokoban.
+-- We assume all spatial predicates are c_in_<i>.
+num_object_types :: Template -> Int
+num_object_types t = length (types (frame t)) - 1
+
+-- This code is specific to Sokoban.
+visual_sokoban_clauses :: Template -> [String]
+visual_sokoban_clauses t = senses_clauses n ++ [""] ++ some_type_at_clauses n ++ [""] ++ something_at_clauses n ++ [""] ++ possible_sprite_at_clauses n ++ [""] where n = num_object_types t
+
+senses_clauses :: Int -> [String]
+senses_clauses n = concat (map f [1 .. n]) where
+    f i = [
+            "1 { senses(s2(c_in_" ++ show i ++ ", Obj, Cell), T) : contains_visual_type(Cell, VT, T) } 1 :-",
+            "\tis_visual_type(Obj, VT),",
+            "\tVT = vt_type_" ++ show i ++ ",",
+            "\tis_time(T),",
+            "\tnot is_test_time(T).",
+            ""
+            ]
+
+some_type_at_clauses :: Int -> [String]
+some_type_at_clauses n = concat (map f [1 .. n]) where
+    f i = [
+            "some_type_at(Cell, VT, T) :- ",
+            "\tsenses(s2(c_in_" ++ show i ++ ", X, Cell), T),",
+            "\tis_visual_type(X, VT).",
+            ""
+            ]
+
+something_at_clauses :: Int -> [String]
+something_at_clauses n = concat (map f [1 .. n]) where
+    f i = [
+            "something_at(T, C) :- ",
+            "\tis_test_time(T),",
+            "\tholds(s2(c_in_" ++ show i ++ ", Obj, C), T).",
+            ""
+            ]
+
+possible_sprite_at_clauses :: Int -> [String]
+possible_sprite_at_clauses n = concat (map f [1 .. n]) where
+    f i = [
+            "possible_sprite_at(T, C, S) :- ",
+            "\tis_test_time(T), ",
+            "\tholds(s2(c_in_" ++ show i ++ ", Obj, C), T), ",
+            "\tis_visual_type(Obj, VT), ",
+            "\tsprite_type(S, VT).    ",
+            ""
+            ]
+
+sprite_type_text :: Int -> [String]
+sprite_type_text num_preds = "" : concat (map f2 its) where
+    ts = map f [0 .. num_preds]
+    f p = "type_" ++ show p
+    its = zip [1..] ts
+    f2 (i, t) = ["sprite_type(E, vt_" ++ t ++ ") :-"] ++ g i
+    g i = map (h i) [1 .. length ts] ++ [""]
+    h i j = "\tbnn_result(E, " ++ show j ++ ", " ++ (if i == j then "1" else "0") ++ ")" ++ (if j == length ts then "." else ",")
+
+looks_constraints_text :: Int -> [String]
+looks_constraints_text num_preds = concat (map g ts) where
+    ts = map f [0 .. num_preds]
+    f p = "type_" ++ show p
+    g t = [":- not some_looks_type(vt_" ++ t ++ ").", 
+        "some_looks_type(vt_" ++ t ++ ") :- contains_visual_type(C, vt_" ++ t ++ ", T)."]
+
+bnn_text :: Int -> [String]
+bnn_text num_preds = ["", n1, n2, n3] where
+    n1 = "nodes(1, 25). "
+    n2 = "nodes(2, 10)."
+    n3 = "nodes(3, " ++ show (num_preds + 1) ++ ")."
 

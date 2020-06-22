@@ -255,7 +255,7 @@ main = do
     args <- getArgs
     case args of
         ["all"] -> do
-            Monad.forM_ all_examples $ \e -> output_rule "../data/eca" e
+            Monad.forM_ all_examples $ \e -> output_rule "data/eca" e
             write_single_experiment
         ["binding"] -> do_binding_examples
         _ -> do
@@ -263,7 +263,7 @@ main = do
 
 do_binding_examples :: IO ()
 do_binding_examples = do
-    Monad.forM_ binding_examples $ \e -> output_rule "../data/misc" e
+    Monad.forM_ binding_examples $ \e -> output_rule "data/misc" e
     output_binding_single_experiment
 
 data Example = E {

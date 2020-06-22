@@ -2,21 +2,24 @@
 
 ## Installation instructions
 
-You need to have installed Haskell and Clingo.
+You need to have installed Haskell and Clingo (version 4.5 or above).
 
 1. To install Haskell:
-   * go to https://www.haskell.org/downloads/
+    * go to https://www.haskell.org/downloads/
 
-2. To install Clingo (version 4.5 or above):
-   * go to https://potassco.org/clingo/
+2. You also need to install various additional Haskell libraries:
+    * `cabal install Cabal cabal-install`
+    * cabal install <TODO>
+
+3. To install Clingo:
+    * go to https://potassco.org/clingo/
 
 ## Compilation instructions
 
-Once you have Haskell and Clingo installed, just run (from the root directory):
-   * `cd code`
-   * `cabal configure`
-   * `cabal build`
-   * `cabal install`
+Once you have clingo installed, Haskell installed, and also
+the addition Haskell libraries, just run (from the root directory):
+
+`scripts/compile_all.sh`
 
 ## Simple Examples
 
@@ -24,56 +27,66 @@ Once the system is installed (see above), you are ready to try some examples.
 
 To run these examples, make sure you are in the root directory.
 
-In this simple example, there is a single sensor oscillating between on and off:
-`scripts/solve.sh misc predict_1.lp`
+A single sensor oscillating between on and off:
+`code/solve misc predict_1.lp`
 
-In this example, there are two sensors. One oscillates between on and off, while the other has the same reading throughout:
-`scripts/solve.sh misc predict_2.lp`
+Two sensors, one oscillates between on and off, while the other has the same reading throughout:
+`code/solve misc predict_2.lp`
 
-Here, we search through templates of increasing complexity, looking for a unified interpretation:
-`scripts/solve.sh eca_general predict_eca_245_b3.lp`
+Exogenous action:
+`code/solve misc exog_1.lp`
+
+Searching through templates of increasing complexity, looking for a unified interpretation:
+`code/solve eca_general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
-The following examples take significantly longer to run than the simple examples above. But all examples terminate within 24 hours (on a standard MacBook).
+These examples take significantly longer to run than the simple examples above. There is a time-limit of 4 hours per template. 
 
 ECA prediction:
-`scripts/solve.sh eca predict_110_b5_t14.lp`
+`code/solve eca predict_110_b5_t14.lp`
 
 ECA retrodiction:
-`scripts/solve.sh eca retrodict_110_b5_t14.lp`
+`code/solve eca retrodict_110_b5_t14.lp`
 
 ECA imputation:
-`scripts/solve.sh eca impute_110_b5_t14.lp`
+`code/solve eca impute_110_b5_t14.lp`
 
 The Seek Whence "theme song" babbbbbcbbdb...
-`scripts/solve.sh sw predict_3.lp`
+`code/solve sw predict_3.lp`
 
 Music prediction:
-`scripts/solve.sh music predict_IncyWincySpiderSmall.lp`
+`code/solve music predict_IncyWincySpiderSmall.lp`
 
 Rhythm prediction:
-`scripts/solve.sh rhythm predict_Mazurka.lp`
+`code/solve rhythm predict_Mazurka.lp`
 
 Binding prediction:
-`scripts/solve.sh binding predict_r2_b5.lp`
+`code/solve binding predict_r2_b5.lp`
 
 Occlusion:
-`scripts/solve.sh occlusion w1`
+`code/solve occlusion w1`
+
+Walker:
+`code/solve walker predict w0`
+
+Noisy sequences:
+`code/solve noisy 1 3 2'
 
 In general, solve can be run with any file in the data directory.
 The options are:
-  * `./solve.sh eca <file in data/eca>`
-  * `./solve.sh sw <file in data/sw>`
-  * `./solve.sh music <file in data/music>`
-  * `./solve.sh rhythm <file in data/rhythm>`
-  * `./solve.sh binding <file in data/binding>`
-  * `./solve.sh occlusion <file in data/binding>`
+    * `code/solve eca <file in data/eca>`
+    * `code/solve sw <file in data/sw>`
+    * `code/solve music <file in data/music>`
+    * `code/solve rhythm <file in data/rhythm>`
+    * `code/solve binding <file in data/binding>`
+    * `code/solve occlusion <file in data/binding>`
+    * `code/solve walker [predict/retrodict/impute] <world-id>`
 
 ## Understanding the output of the solve process
 
 When solve is run, it produces...
-* the theory *θ = (φ, I, R, C)* composed of...
+* the theory *θ* composed of...
     * the initial conditions (*I*)
     * the rules (*R*)
     * the constraints (*C*)
@@ -82,31 +95,21 @@ When solve is run, it produces...
 * accuracy: whether or not all the predicted sensor readings match the hidden readings
 
 To generate a latex-readable description of the output:
-  * set `flag_output_latex = True` in Interpretation.hs
-  * recompile
-  * run again
-
-## Precomputed results
-
-The experimental results described in the paper are stored in the results folder.
+    * set `flag_output_latex = True` in Interpretation.hs
+    * recompile: `scripts/compile_solve.sh`
+    * run again
 
 ## Data generation
 
 The data is already provided in the `data/` folder.
 
-But if you want to generate more data:
-  * Compile ECA.hs, SW.hs, Music.hs, Rhythm.hs in the code directory
-  * `cd code`
-  * `./eca all`
-  * `./sw all`
-  * `./music all`
-  * `./rhythm all`
-
-## Videos
-
-There are four videos in the `videos/` folder:
-  * example1.gif, example2.gif, and example3.gif are three ways of interpreting Example 9 in the paper
-  * theme-song.gif is a representation of the interpretation in Figure 7 in Section 5.3 of the paper
+But if you want to regenerate it:
+* `scripts/compile_all.sh`
+* `cd code`
+* `./eca all`
+* `./sw all`
+* `./music all`
+* `./rhythm all`
 
 
 

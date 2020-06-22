@@ -14,7 +14,13 @@ import qualified System.Process as Process
 import Interpretation
 import ExampleTemplates
 import SolveTemplates
-import OcclusionData
+import qualified OcclusionData as OcclusionData
+import qualified WalkerData as WalkerData
+import qualified SokobanData as SokobanData
+import qualified SokobanTypes as SokobanTypes
+import qualified NoisySequenceData as NoisySequenceData
+import qualified HouseData as HouseData
+import qualified HouseTypes as HouseTypes
 
 ----------------------------------- main --------------------------------------
 
@@ -25,13 +31,24 @@ main = do
     case args of
         ["sw", f] -> solve_sw_iteratively f 1
         ["sw", f, n] -> solve_sw_iteratively f (read n)
+        ["nonstationary", f] -> solve_nonstationary_iteratively f
         ["eca", f] -> solve_eca_iteratively f
-        ["eca_general", f] -> solve_eca_general f
+        ["eca-general", f] -> solve_eca_general f
         ["music", f] -> solve_music_iteratively f 
         ["rhythm", f] -> solve_rhythm_iteratively f 
         ["misc", f] -> solve_misc f
         ["occlusion", f] -> solve_occlusion f
+        ["walker", t, f] -> solve_walker t f
         ["binding", f] -> solve_binding f
+        ["book", f] -> solve_book f
+        ["sokoban", f] -> solve_sokoban f
+        ["sok-pixels", f] -> solve_sok_pixels f
+        ["noisy", i, j, k] -> solve_noisy i j k -- expects three integers
+        ["mislabel", f] -> solve_mislabel f
+        ["var-length-noise", f] -> solve_var_length True f
+        ["var-length-no-noise", f] -> solve_var_length False f
+        ["seq-mnist", f] -> solve_seq_mnist_iteratively f 1        
+        ["house", f] -> solve_house f
         _ -> putStrLn $ "Usage: solve sw/eca/music/rhythm/misc <file>"
 
 
@@ -57,6 +74,110 @@ process_misc dir t input_f = do
             Monad.forM_ ls3 putStrLn
 
 -------------------------------------------------------------------------------
+-- Sokoban-specific solving
+-------------------------------------------------------------------------------
+
+get_sokoban_data :: String -> (Int, Int, Int)
+get_sokoban_data s = case lookup s SokobanData.sokoban_examples of
+    Nothing -> error $ "No sokoban entry called " ++ s
+    Just e -> extract_sokoban_data e
+
+extract_sokoban_data :: SokobanTypes.Example -> (Int, Int, Int)
+extract_sokoban_data e = (max_x, max_y, num_blocks) where
+    s = SokobanTypes.initial_state e
+    max_x = length (s !! 0)
+    max_y = length s
+    num_blocks = sum (map f s)
+    f x = length (filter (== 'b') x)
+
+solve_sokoban :: String -> IO ()
+solve_sokoban f = do
+    let (max_x, max_y, n_blocks) = get_sokoban_data f
+    let t = template_sokoban max_x max_y n_blocks
+    putStrLn $ "max_x: " ++ show max_x ++ " max_y: " ++ show max_y ++ " n_blocks: " ++ show n_blocks
+    let input_f = "predict_" ++ f ++ ".lp"
+    (results_f, ls2) <- do_solve "data/sokoban" input_f t
+    case ls2 of
+        [] -> do
+            putStrLn "No solution found."
+        _ -> do
+            let ans = last_answers ls2
+            Monad.forM_ ans (write_latex t)
+            let ls3 = map (process_answer_with_template t) ans
+            Monad.forM_ ls3 putStrLn
+
+-------------------------------------------------------------------------------
+-- Sokoban from raw pixels
+-------------------------------------------------------------------------------
+
+solve_sok_pixels :: String -> IO ()
+solve_sok_pixels f = do
+    let (max_x, max_y, n_blocks) = get_sokoban_data f
+    putStrLn $ "max_x: " ++ show max_x ++ " max_y: " ++ show max_y
+    let input_f = "predict_" ++ f ++ ".lp"
+    solve_iteratively "data/sok-pixels" input_f (all_sok_pixels_templates max_x max_y n_blocks) False False
+
+k_max_num_sok_pixels_templates :: Int
+k_max_num_sok_pixels_templates = 10
+
+-- Fixing the number of blocks to speed up the experiment.
+all_sok_pixels_templates :: Int -> Int -> Int -> [(String, Template)]
+all_sok_pixels_templates max_x max_y n_blocks = [("Using " ++ show 1 ++ " persistent objects of type t1 and " ++ show n_blocks ++ " of type t2", template_sok_pixels max_x max_y 1 n_blocks)]
+--all_sok_pixels_templates max_x max_y n_blocks = map f ps where
+--    ps = take k_max_num_sok_pixels_templates ([1 ..] Universe.+*+ [1 ..])
+--    f (num_t1s, num_t2s) = ("Using " ++ show num_t1s ++ " persistent objects of type t1 and " ++ show num_t2s ++ " of type t2", template_sok_pixels max_x max_y num_t1s num_t2s)
+
+
+-------------------------------------------------------------------------------
+-- Noisy-sequence-specific solving
+-------------------------------------------------------------------------------
+
+solve_noisy :: String -> String -> String -> IO ()
+solve_noisy is js ks = do
+    let i = read is :: Int
+    let j = read js :: Int
+    let k = read ks :: Int
+    case lookup (i,j,k) NoisySequenceData.sequence_map of
+        Nothing -> error "Out of bounds"
+        Just st -> do
+            print st
+            let input_f = "predict_" ++ show i ++ "_" ++ show j ++ "_" ++ show k ++ ".lp"
+            let num_ps = NoisySequenceData.guess_num_predicates st
+            solve_iteratively "data/noisy" input_f (all_noisy_templates num_ps) True True
+
+all_noisy_templates :: Int -> [(String, Template)]
+all_noisy_templates num_ps = map f ps where
+    ps = [0 .. 6] Universe.+*+ [0 .. 10]
+    f (p, r) = ("Using " ++ show p ++ " extra predicates and " ++ show r ++ " rules", template_noisy num_ps p r)
+
+-------------------------------------------------------------------------------
+-- Mislabelled-sequence-specific solving
+-------------------------------------------------------------------------------
+
+solve_mislabel :: String -> IO ()
+solve_mislabel f = do
+    solve_iteratively "data/mislabel" f all_mislabel_templates True False
+    return ()
+
+all_mislabel_templates :: [(String, Template)]
+all_mislabel_templates = map f ps where
+    ps = [3] Universe.+*+ [3]
+    -- ps = [0 .. 6] Universe.+*+ [0 .. 10]
+    f (p, r) = ("Using " ++ show p ++ " extra predicates and " ++ show r ++ " rules", template_mislabel 3 p r)
+
+-------------------------------------------------------------------------------
+-- For testing relative sequence lengths for noisy and non-noisy versions.
+-------------------------------------------------------------------------------
+
+solve_var_length :: Bool -> String -> IO ()
+solve_var_length use_noise f = do
+    let t = (template_mislabel 3 3 3) {
+            dir = "var_length",
+            use_noise = use_noise
+        }
+    solve_iteratively "data/var_length" f [("singleton", t)] True False
+
+-------------------------------------------------------------------------------
 -- occlusion-specific iteration
 -------------------------------------------------------------------------------
 
@@ -66,11 +187,26 @@ solve_occlusion f = case lookup f occlusion_table of
     Just (dir, template, input) -> process_misc dir template input
 
 occlusion_table :: [(String, (String, Template, String))]
-occlusion_table = map f occlusion_worlds where
+occlusion_table = map f OcclusionData.occlusion_worlds where
     f (s, w) = let fn = "input_occlusion_" ++ s ++ ".lp" in 
-                let num_cells = max_x w * max_y w in
-                let num_objs = length (occ_objects w) in
+                let num_cells = OcclusionData.max_x w * OcclusionData.max_y w in
+                let num_objs = length (OcclusionData.occ_objects w) in
                 (s, ("data/occlusion", template_occlusion fn num_cells num_objs, fn))
+
+-------------------------------------------------------------------------------
+-- walker-specific iteration
+-------------------------------------------------------------------------------
+
+solve_walker :: String -> String -> IO ()
+solve_walker task f = case lookup f (walker_table task) of
+    Nothing -> error $ "No walker entry with this id: " ++ f
+    Just (dir, template, input) -> process_misc dir template input
+
+walker_table :: String -> [(String, (String, Template, String))]
+walker_table task = map f WalkerData.walker_worlds where
+    f (s, w) = let fn = task ++ "_" ++ s ++ ".lp" in 
+                let num_objs = length (WalkerData.occ_objects w) in
+                (s, ("data/walker", template_walker (WalkerData.max_x w) (WalkerData.max_y w) num_objs, fn))
 
 -------------------------------------------------------------------------------
 -- binding-specific solving
@@ -78,6 +214,27 @@ occlusion_table = map f occlusion_worlds where
 
 solve_binding :: String -> IO ()
 solve_binding f = process_misc "data/binding" template_binding f
+
+-------------------------------------------------------------------------------
+-- nonstationary-specific iteration
+-------------------------------------------------------------------------------
+
+solve_nonstationary_iteratively :: String -> IO ()
+solve_nonstationary_iteratively input_f = do
+    solve_iteratively "data/nonstationary" input_f (all_sw_templates input_f 1) True False
+
+
+-------------------------------------------------------------------------------
+-- Teaching-size-specific iteration
+-------------------------------------------------------------------------------
+
+solve_book :: String -> IO ()
+solve_book input_f = solve_iteratively "data/teaching-size" input_f all_book_templates False False
+
+all_book_templates :: [(String, Template)]
+all_book_templates = map f ps where
+    ps = [0 .. 6] Universe.+*+ [2 .. 10]
+    f (p, r) = ("Using " ++ show p ++ " extra predicates and " ++ show r ++ " rules", book_template p r)
 
 -------------------------------------------------------------------------------
 -- SW-specific iteration
@@ -102,6 +259,34 @@ make_complex_sw_template input_f n = update_sw_template_objects t n "complex" wh
 
 update_sw_template_objects :: Template -> Int -> String -> (String, Template)
 update_sw_template_objects t n c = (s, t') where
+    f = (frame t) { objects = get_objects t ++ [(O ("gen_" ++ show i), T "cell") | i <- [1..n]]
+        }
+    t' = t { frame = f } 
+    s = "Num objects: " ++ show n ++ " complexity: " ++ c
+
+-------------------------------------------------------------------------------
+-- SW-specific iteration
+-------------------------------------------------------------------------------
+
+solve_seq_mnist_iteratively :: String -> Int -> IO ()
+solve_seq_mnist_iteratively input_f num_objects = do
+    solve_iteratively "data/seq-mnist" input_f (all_seq_mnist_templates input_f num_objects) False False
+
+all_seq_mnist_templates :: String -> Int -> [(String, Template)]
+all_seq_mnist_templates input_f n = s ++ c where
+    s = map (make_simple_seq_mnist_template input_f) [n..3]
+    c = map (make_complex_seq_mnist_template input_f) [n..3]
+
+make_simple_seq_mnist_template :: String -> Int -> (String, Template)
+make_simple_seq_mnist_template input_f n = update_seq_mnist_template_objects t n "simple" where
+    t = template_seq_mnist_simple n
+
+make_complex_seq_mnist_template :: String -> Int -> (String, Template)
+make_complex_seq_mnist_template input_f n = update_seq_mnist_template_objects t n "complex" where
+    t = template_seq_mnist_complex n
+
+update_seq_mnist_template_objects :: Template -> Int -> String -> (String, Template)
+update_seq_mnist_template_objects t n c = (s, t') where
     f = (frame t) { objects = get_objects t ++ [(O ("gen_" ++ show i), T "cell") | i <- [1..n]]
         }
     t' = t { frame = f } 
@@ -309,7 +494,7 @@ solve_eca_iteratively :: String -> IO ()
 solve_eca_iteratively input_f = solve_iteratively "data/eca" input_f (all_eca_templates input_f) False False
     
 all_eca_templates :: String -> [(String, Template)]
-all_eca_templates input_f = map (make_eca_template False input_f) [4..8]
+all_eca_templates input_f = map (make_eca_template False input_f) [0..8]
 
 -------------------------------------------------------------------------------
 -- ECA iteration using the general code for template iteration
@@ -317,7 +502,7 @@ all_eca_templates input_f = map (make_eca_template False input_f) [4..8]
 
 solve_eca_general :: String -> IO ()
 solve_eca_general input_f = do
-    solve_iteratively "data/misc" input_f (all_general_eca_templates input_f) True True
+    solve_iteratively "data/misc" input_f (all_general_eca_templates input_f) False False
 
 all_general_eca_templates :: String -> [(String, Template)]
 all_general_eca_templates input_f = map f (zip [1..] ts) where
@@ -516,6 +701,7 @@ all_var_specs_with_index ts i = [(V ("gen_" ++ show i), t) | t <- ts]
 -- Solving iteratively
 -------------------------------------------------------------------------------
 
+solve_iteratively :: String -> String -> [(String, Template)] -> Bool -> Bool -> IO ()
 solve_iteratively dir input_f ts continue output_intermediaries = solve_iteratively2 dir input_f ts continue output_intermediaries Nothing where
     max_int = maxBound :: Int
     max_int_s = show max_int
@@ -524,6 +710,7 @@ solve_iteratively2 :: String -> String -> [(String, Template)] -> Bool -> Bool -
 solve_iteratively2 dir input_f [] False _ _ = putStrLn $ "Unable to solve " ++ input_f
 solve_iteratively2 dir input_f [] True _ Nothing = putStrLn $ "Unable to solve " ++ input_f
 solve_iteratively2 dir input_f [] True _ (Just r) = do
+    putStrLn "Best answer:"
     let t = result_template r
     putStrLn $ process_answer_with_template t (Answer (result_answer r))
     putStrLn $ process_answer_with_template t (Optimization (result_optimization r))    
@@ -551,9 +738,23 @@ solve_iteratively2 dir input_f ((s, t) : ts) continue output_intermediary_result
 update_best :: Template -> Maybe ClingoResult -> [ClingoOutput] -> Maybe ClingoResult
 update_best t Nothing [Answer a, Optimization s] = Just r where
     r = CR { result_answer = a, result_optimization = s, result_template = t }
-update_best t (Just r) [Answer a, Optimization s] = let (old_int, new_int) = (read (result_optimization r), read s) :: (Int, Int) in case new_int < old_int of
-    True -> Just (CR { result_answer = a, result_optimization = s, result_template = t })
-    False -> Just r
+update_best t (Just r) [Answer a, Optimization s] = 
+    case less_optim s (result_optimization r) of
+        True -> Just (CR { result_answer = a, result_optimization = s, result_template = t })
+        False -> Just r
+
+-- Given two strings e.g. "3 16 2" "5 1 4",
+-- extract the various integers and do lexicographic ordering
+-- e.g. "7" < "23"
+-- e.g. "7 2" < "11 1"
+-- e.g. "1 5" < "1 8"
+-- e.g. "1 7" < "1 23"
+less_optim :: String -> String -> Bool
+less_optim x y = xsi < ysi where
+    xs = bimble_split x ' '
+    ys = bimble_split y ' '
+    xsi = map read xs :: [Int]
+    ysi = map read ys :: [Int]
 
 do_solve :: String -> String -> Template -> IO (String, [ClingoOutput])
 do_solve dir input_f t = do
@@ -625,4 +826,37 @@ generate_music_with_extra_vars n = do
     let t'= t { frame = frame'}
     _ <- do_template False t' "TODO" "TODO"
     return ()
+
+-------------------------------------------------------------------------------
+-- House-specific solving
+-------------------------------------------------------------------------------
+
+get_house_data :: String -> (Int, Int, Int, Int)
+get_house_data s = case lookup s HouseData.house_examples of
+    Nothing -> error $ "No house entry called " ++ s
+    Just e -> extract_house_data e
+
+extract_house_data :: HouseTypes.Example -> (Int, Int, Int, Int)
+extract_house_data e = (vx, vy, wx, wy) where
+    s = HouseTypes.initial_house e
+    wx = length (s !! 0)
+    wy = length s
+    (vx, vy) = HouseTypes.initial_window_size e
+
+solve_house :: String -> IO ()
+solve_house f = do
+    let (v_x, v_y, w_x, w_y) = get_house_data f
+    putStrLn $ "v_x: " ++ show v_x ++ " v_y: " ++ show v_y
+    putStrLn $ "w_x: " ++ show w_x ++ " w_y: " ++ show w_y
+    let t = template_house v_x v_y w_x w_y
+    let input_f = "house_" ++ f ++ ".lp"
+    (results_f, ls2) <- do_solve "data/house" input_f t
+    case ls2 of
+        [] -> do
+            putStrLn "No solution found."
+        _ -> do
+            let ans = last_answers ls2
+            Monad.forM_ ans (write_latex t)
+            let ls3 = map (process_answer_with_template t) ans
+            Monad.forM_ ls3 putStrLn
 

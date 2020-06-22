@@ -50,6 +50,7 @@ holds(s2(C, Obj, Obj2), T) :-
 holds(S, T+1) :-
     holds(S, T),
     is_time(T+1),
+    not is_static_atom(S),
     not -holds(S, T+1).
 
 -holds(S, T) :-
@@ -70,6 +71,8 @@ holds(GA, T) :-
     ground_atom(VA, GA, Subs),
     eval_body(R, Subs, T).
 
+% exogenous action
+holds(GA, T) :- exogenous(GA, T).
 
 %------------------------------------------------------------------------------
 % Utility functions
@@ -129,15 +132,27 @@ var_atom_group(VA, VG) :- var_fluent(VA, VG).
 var_atom_group(VA, VG) :- var_permanent(VA, VG).    
 
 cause_head(s(C, V)) :-
-    is_var_fluent(s(C, V)).
+    is_var_fluent(s(C, V)),
+    not is_static_concept(C).
 
 cause_head(s2(C, V, V2)) :-
-    is_var_fluent(s2(C, V, V2)).
+    is_var_fluent(s2(C, V, V2)),
+    not is_static_concept(C).
 
 permanent(A) :- gen_permanent(A).
 
 rule_causes_head(R, VC) :-
     rule_head_causes(R, VC).
+
+is_ground_atom(G) :- ground_atom(_, G, _).
+
+is_static_atom(s(C, X)) :-
+    is_ground_atom(s(C, X)),
+    is_static_concept(C).
+
+is_static_atom(s2(C, X, Y)) :-
+    is_ground_atom(s2(C, X, Y)),
+    is_static_concept(C).
 
 %------------------------------------------------------------------------------
 % Incompossibility

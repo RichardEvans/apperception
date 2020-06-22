@@ -36,7 +36,24 @@ make_imputation_sequence xs = do
     return $ map f (zip [1..] (zip indices xs))
 
 sequences :: [String]
-sequences = [
+sequences = c_sequences
+
+nonstationary_sequences :: [String]
+nonstationary_sequences = [
+    -- One change sequences:
+    "aaaaaabcdef",
+    "ffffffedcba",
+    "abcdeffffff",
+    "fedcbaaaaaa",
+    -- Two change sequences:
+    "abcdeffffffedcba",
+    "fedcbaaaaaabcdef",
+    "aaaaaabcdeffffff",
+    "ffffffedcbaaaaaa"
+    ]    
+
+sw_sequences :: [String]
+sw_sequences = [
     "aababcabcda",
     "abcde",
     "babbbbbcbbdbbebbf",
@@ -69,7 +86,30 @@ sequences = [
     "bafbaebad"
     ]
 
-
+c_sequences :: [String]
+c_sequences = [
+    "ababab",
+    "acbdce",
+    "dfcebd",
+    "ddccbb",
+    -- "ddcfbha", -- out of range
+    "aaabbbc",
+    -- "dcegfhji", -- out of range
+    -- "adgj", -- out of range
+    "cabdbccecd",
+    "aaaabbbbc",
+    -- "eegceac", -- out of range
+    -- "abdeg", -- out of range
+    "ddeecdee",
+    -- "fgeddac", -- out of range
+    "efcfab",
+    "efedeecde",
+    "eeedffc",
+    "bbebadb",
+    "edfddcfc",
+    "fedfecfe",
+    "hgf_dcba"
+    ]
 
 main :: IO ()
 main = do
@@ -79,9 +119,13 @@ main = do
 output_sequence :: (String, (String, [Int], TaskType)) -> IO ()
 output_sequence (i, (s, ht, task)) = output_seq i s ht task
 
+k_folder :: String
+k_folder = "c-test/"
+-- k_folder = "sw/"
+
 output_seq :: String -> String -> [Int] -> TaskType -> IO ()    
 output_seq i s hts task = do
-    let f = "../data/sw/" ++ show task ++ "_" ++ i ++ ".lp"
+    let f = "data/" ++ k_folder ++ show task ++ "_" ++ i ++ ".lp"
     putStrLn $ "Using sequence: " ++ s
     putStrLn $ "Creating file: " ++ f
     writeFile f "%------------------------------------------------------------------------------\n"
@@ -152,6 +196,22 @@ gen_single_experiment seqs = hs ++ xs ++ ts where
     ts = ["esac"]
     xs = concat (map f seqs)
     f (i, (x, _, _)) = ["\t" ++ i ++ " )", "\t\techo \"Solving " ++ x ++ "...\"", "\t\ttime ./solve sw input_" ++ i ++ ".lp", "\t\t;;"]
+       
+
+write_seq_mnist_experiment :: IO ()
+write_seq_mnist_experiment = do
+    let f = "single_seq_mnist.sh"
+    writeFile f (unlines gen_seq_mnist_experiment)
+    let c = "chmod 777 " ++ f
+    Process.callCommand c
+
+gen_seq_mnist_experiment :: [String]
+gen_seq_mnist_experiment = hs ++ xs ++ ts where
+    hs = ["#!/bin/bash", "", "case $(expr $1 + 1) in"]
+    ts = ["esac"]
+    xs = concat (map f (zip [1..] ps))
+    ps = [(i, j) | i <- [1..10], j <- [1..5]]
+    f (n, (i, j)) = let f = "seq_" ++ show i ++ "_" ++ show j ++ ".lp" in ["\t" ++ show n ++ " )", "\t\techo \"Solving " ++ f ++ "...\"", "\t\ttime code/solve seq-mnist " ++ f, "\t\t;;"]
                     
 latex_sequences :: IO [String]
 latex_sequences = do
