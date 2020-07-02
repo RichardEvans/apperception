@@ -70,6 +70,9 @@ Mislabelled data (noise):
 Fuzzy sequences:
 `code/solve noisy 1 3 2`
 
+Sokoban:
+`code/solve sokoban e_8_17`
+
 Sokoban from pixels:
 `code/solve sok-pixels e_10_17`
 
