@@ -22,19 +22,19 @@ Once you have Haskell and Clingo installed, just run (from the root directory):
 
 Once the system is installed (see above), you are ready to try some examples.
 
-To run these examples, make sure you are in the root directory.
+To run these examples, **make sure you are in the root directory**.
 
 A single sensor oscillating between on and off:
-`code/solve misc predict_1.lp`
+   * `code/solve misc predict_1.lp`
 
 Two sensors, one oscillates between on and off, while the other has the same reading throughout:
-`code/solve misc predict_2.lp`
+   * `code/solve misc predict_2.lp`
 
 Exogenous action:
-`code/solve misc exog_1.lp`
+   * `code/solve misc exog_1.lp`
 
 Searching through templates of increasing complexity, looking for a unified interpretation:
-`code/solve eca_general predict_eca_245_b3.lp`
+   * `code/solve eca-general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
@@ -64,21 +64,24 @@ Binding prediction:
 Occlusion:
 `code/solve occlusion w1`
 
-Walker:
-`code/solve walker predict w0`
+Mislabelled data (noise):
+`code/solve mislabel predict_1_100_0_1.lp`
 
-Noisy sequences:
-`code/solve noisy 1 3 2'
+Fuzzy sequences:
+`code/solve noisy 1 3 2`
+
+Sokoban from pixels:
+`code/solve sok-pixels e_10_17`
 
 In general, solve can be run with any file in the data directory.
 The options are:
-    * `code/solve eca <file in data/eca>`
-    * `code/solve sw <file in data/sw>`
-    * `code/solve music <file in data/music>`
-    * `code/solve rhythm <file in data/rhythm>`
-    * `code/solve binding <file in data/binding>`
-    * `code/solve occlusion <file in data/binding>`
-    * `code/solve walker [predict/retrodict/impute] <world-id>`
+ * `code/solve eca <file in data/eca>`
+ * `code/solve sw <file in data/sw>`
+ * `code/solve music <file in data/music>`
+ * `code/solve rhythm <file in data/rhythm>`
+ * `code/solve binding <file in data/binding>`
+ * `code/solve occlusion <file in data/binding>`
+ * `code/solve walker [predict/retrodict/impute] <world-id>`
 
 ## Understanding the output of the solve process
 
@@ -92,9 +95,9 @@ When solve is run, it produces...
 * accuracy: whether or not all the predicted sensor readings match the hidden readings
 
 To generate a latex-readable description of the output:
-    * set `flag_output_latex = True` in Interpretation.hs
-    * recompile: `scripts/compile_solve.sh`
-    * run again
+ * set `flag_output_latex = True` in Interpretation.hs
+ * recompile: `scripts/compile_solve.sh`
+ * run again
 
 ## Data generation
 
