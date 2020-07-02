@@ -71,7 +71,7 @@ Fuzzy sequences:
 `code/solve noisy 1 3 2`
 
 Sokoban from pixels:
-`code/solve sok-pixels e_9_17`
+`code/solve sok-pixels e_10_17`
 
 In general, solve can be run with any file in the data directory.
 The options are:
