@@ -75,13 +75,13 @@ Sokoban from pixels:
 
 In general, solve can be run with any file in the data directory.
 The options are:
-    * `code/solve eca <file in data/eca>`
-    * `code/solve sw <file in data/sw>`
-    * `code/solve music <file in data/music>`
-    * `code/solve rhythm <file in data/rhythm>`
-    * `code/solve binding <file in data/binding>`
-    * `code/solve occlusion <file in data/binding>`
-    * `code/solve walker [predict/retrodict/impute] <world-id>`
+ * `code/solve eca <file in data/eca>`
+ * `code/solve sw <file in data/sw>`
+ * `code/solve music <file in data/music>`
+ * `code/solve rhythm <file in data/rhythm>`
+ * `code/solve binding <file in data/binding>`
+ * `code/solve occlusion <file in data/binding>`
+ * `code/solve walker [predict/retrodict/impute] <world-id>`
 
 ## Understanding the output of the solve process
 
