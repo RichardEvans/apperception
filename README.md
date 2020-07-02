@@ -95,9 +95,9 @@ When solve is run, it produces...
 * accuracy: whether or not all the predicted sensor readings match the hidden readings
 
 To generate a latex-readable description of the output:
-    * set `flag_output_latex = True` in Interpretation.hs
-    * recompile: `scripts/compile_solve.sh`
-    * run again
+ * set `flag_output_latex = True` in Interpretation.hs
+ * recompile: `scripts/compile_solve.sh`
+ * run again
 
 ## Data generation
 
