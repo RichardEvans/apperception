@@ -74,7 +74,7 @@ Sokoban:
 `code/solve sokoban e_8_17`
 
 Sokoban from pixels:
-`code/solve sok-pixels e_10_17`
+`code/solve sok-pixels e_10_3`
 
 In general, solve can be run with any file in the data directory.
 The options are:
