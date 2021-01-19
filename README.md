@@ -17,74 +17,75 @@ Once you have Haskell and Clingo installed, just run (from the root directory):
    * `cabal configure`
    * `cabal build`
    * `cabal install`
+   * cd ..
 
 ## Simple Examples
 
 Once the system is installed (see above), you are ready to try some examples.
 
-To run these examples, **make sure you are in the root directory**.
+To run these examples, **make sure you are in the root directory called apperception**.
 
 A single sensor oscillating between on and off:
-   * `code/solve misc predict_1.lp`
+   * `~/.cabal/bin/solve misc predict_1.lp`
 
 Two sensors, one oscillates between on and off, while the other has the same reading throughout:
-   * `code/solve misc predict_2.lp`
+   * `~/.cabal/bin/solve misc predict_2.lp`
 
 Exogenous action:
-   * `code/solve misc exog_1.lp`
+   * `~/.cabal/bin/solve misc exog_1.lp`
 
 Searching through templates of increasing complexity, looking for a unified interpretation:
-   * `code/solve eca-general predict_eca_245_b3.lp`
+   * `~/.cabal/bin/solve eca-general predict_eca_245_b3.lp`
 
 ## More Complex Examples
 
 These examples take significantly longer to run than the simple examples above. There is a time-limit of 4 hours per template. 
 
 ECA prediction:
-`code/solve eca predict_110_b5_t14.lp`
+`~/.cabal/bin/solve eca predict_110_b5_t14.lp`
 
 ECA retrodiction:
-`code/solve eca retrodict_110_b5_t14.lp`
+`~/.cabal/bin/solve eca retrodict_110_b5_t14.lp`
 
 ECA imputation:
-`code/solve eca impute_110_b5_t14.lp`
+`~/.cabal/bin/solve eca impute_110_b5_t14.lp`
 
 The Seek Whence "theme song" babbbbbcbbdb...
-`code/solve sw predict_3.lp`
+`~/.cabal/bin/solve sw predict_3.lp`
 
 Music prediction:
-`code/solve music predict_IncyWincySpiderSmall.lp`
+`~/.cabal/bin/solve music predict_IncyWincySpiderSmall.lp`
 
 Rhythm prediction:
-`code/solve rhythm predict_Mazurka.lp`
+`~/.cabal/bin/solve rhythm predict_Mazurka.lp`
 
 Binding prediction:
-`code/solve binding predict_r2_b5.lp`
+`~/.cabal/bin/solve binding predict_r2_b5.lp`
 
 Occlusion:
-`code/solve occlusion w1`
+`~/.cabal/bin/solve occlusion w1`
 
 Mislabelled data (noise):
-`code/solve mislabel predict_1_100_0_1.lp`
+`~/.cabal/bin/solve mislabel predict_1_100_0_1.lp`
 
 Fuzzy sequences:
-`code/solve noisy 1 3 2`
+`~/.cabal/bin/solve noisy 1 3 2`
 
 Sokoban:
-`code/solve sokoban e_8_17`
+`~/.cabal/bin/solve sokoban e_8_17`
 
 Sokoban from pixels:
-`code/solve sok-pixels e_10_3`
+`~/.cabal/bin/solve sok-pixels e_10_3`
 
 In general, solve can be run with any file in the data directory.
 The options are:
- * `code/solve eca <file in data/eca>`
- * `code/solve sw <file in data/sw>`
- * `code/solve music <file in data/music>`
- * `code/solve rhythm <file in data/rhythm>`
- * `code/solve binding <file in data/binding>`
- * `code/solve occlusion <file in data/binding>`
- * `code/solve walker [predict/retrodict/impute] <world-id>`
+ * `~/.cabal/bin/solve eca <file in data/eca>`
+ * `~/.cabal/bin/solve sw <file in data/sw>`
+ * `~/.cabal/bin/solve music <file in data/music>`
+ * `~/.cabal/bin/solve rhythm <file in data/rhythm>`
+ * `~/.cabal/bin/solve binding <file in data/binding>`
+ * `~/.cabal/bin/solve occlusion <file in data/binding>`
+ * `~/.cabal/bin/solve walker [predict/retrodict/impute] <world-id>`
 
 ## Understanding the output of the solve process
 
