@@ -17,7 +17,7 @@ Once you have Haskell and Clingo installed, just run (from the root directory):
    * `cabal configure`
    * `cabal build`
    * `cabal install`
-   * `cd ..'
+   * `cd ..`
 
 ## Simple Examples
 
