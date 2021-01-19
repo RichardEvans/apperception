@@ -17,8 +17,8 @@ cabal-version:       >=1.10
 
 executable solve
   main-is:             Solve.hs
-  -- other-modules:       
+  other-modules:       ExampleTemplates, HouseData, HouseTypes, Interpretation, NoisySequenceData, OcclusionData, SokobanData, SokobanTypes, SolveTemplates, WalkerData 
   -- other-extensions:    
-  build-depends:       base >=4.8 && <4.9, containers >=0.5 && <0.6, process >=1.6 && <1.7, split >=0.2 && <0.3, random >=1.1 && <1.2, text >=1.2 && <1.3, csound-expression >=5.3 && <5.4, csound-catalog >=0.7 && <0.8, csound-sampler >=0.0 && <0.1, directory >=1.2 && <1.3, universe-base >=1.0 && <1.1
+  build-depends:       base >=4.8, containers >=0.5, process >=1.6 && <1.7, split >=0.2 && <0.3, random >=1.1 && <1.2, text >=1.2 && <1.3, csound-expression >=5.3 && <5.4, csound-catalog >=0.7 && <0.8, csound-sampler >=0.0 && <0.1, directory >=1.2, universe-base >=1.0
   -- hs-source-dirs:      
   default-language:    Haskell2010
