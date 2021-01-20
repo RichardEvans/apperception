@@ -14,8 +14,9 @@ You need to have installed Haskell and Clingo (version 4.5 or above).
 
 Once you have Haskell and Clingo installed, just run (from the root directory):
    * `cd code`
+   * `cabal update`
    * `cabal configure`
-   * `cabal build`
+   * `cabal new-build`
    * `cabal install`
    * `cd ..`
 
