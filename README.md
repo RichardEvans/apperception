@@ -1,4 +1,4 @@
-# The source code for *"Making sense of sensory input"*
+# The source code for *"Making sense of sensory input"* and *"Making sense of raw input"*
 
 ## Installation instructions
 
